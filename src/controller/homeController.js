@@ -20,12 +20,30 @@ const getAllUsers = async (req, res) => {
 const createNewUser = async (req, res) => {
     try {
         await userService.createNewUser(req.body)
-        return res.render('users.ejs')
+        return res.redirect('/users')
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const editUserInfo = async (req, res) => {
+    try {
+        let userData = await userService.editUserInfo(req.body)
+        res.render('edit-users.ejs', { userData })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const deleteUser = async (req, res) => {
+    try {
+        await userService.deleteUser(req.params.id)
+        return res.redirect('/users')
     } catch (e) {
         console.log(e)
     }
 }
 
 module.exports = {
-    helloWorld, getAllUsers, createNewUser
+    helloWorld, getAllUsers, createNewUser, editUserInfo, deleteUser
 }

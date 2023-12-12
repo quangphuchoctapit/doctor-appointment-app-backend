@@ -11,9 +11,6 @@
 <body>
     <div class="container">
         <div class="row">
-            <div>
-                <%= JSON.stringify(userList)%>
-            </div>
             <form action="create-user" method="POST">
                 <h1 class="text-center">Create - View list users</h1>
                 <input type="text" placeholder='email' name="email" class="col-8 ">
@@ -51,8 +48,10 @@
                                     ko hien thi vi qua dai
                                 </td>
                                 <td>
-                                    <button class="btn btn-warning">Edit</button>
-                                    <button class="btn btn-danger">Delete</button>
+                                    <a href="/update-user/<%= item.id %>"><button
+                                            class="btn btn-warning">Edit</button></a>
+                                    <a href="/delete-user/<%= item.id %>"><button
+                                            class="btn btn-danger">Delete</button></a>
                                 </td>
                             </tr>
                             <% }) %>
