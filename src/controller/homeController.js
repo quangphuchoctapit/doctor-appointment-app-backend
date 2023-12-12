@@ -1,20 +1,31 @@
+import userService from '../service/userService'
 
 const helloWorld = (req, res) => {
     try {
-        res.send('hello ok')
+        res.render('home.ejs')
     } catch (e) {
         console.log(e)
     }
 }
 
-const getAllUsers = (req, res) => {
+const getAllUsers = async (req, res) => {
     try {
-        res.send('all users')
+        let userList = await userService.getAllUsers()
+        console.log('check data; ', userList)
+        return res.render('users.ejs', { userList })
+    } catch (e) {
+        console.log(e)
+    }
+}
+const createNewUser = async (req, res) => {
+    try {
+        await userService.createNewUser(req.body)
+        return res.render('users.ejs')
     } catch (e) {
         console.log(e)
     }
 }
 
 module.exports = {
-    helloWorld, getAllUsers
+    helloWorld, getAllUsers, createNewUser
 }
