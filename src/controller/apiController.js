@@ -68,7 +68,7 @@ const getAllUsers = async (req, res) => {
 
 const getUserRole = async (req, res) => {
     try {
-        let data = await userApiService.getUserRole(req.body)
+        let data = await userApiService.getUserRole(req.body.roleId)
         return res.status(200).json({
             EC: data.EC,
             EM: data.EM,
@@ -83,9 +83,10 @@ const getUserRole = async (req, res) => {
     }
 }
 
-const getAllNotDoctors = async (req, res) => {
+const filterRoleNotEqualTo = async (req, res) => {
     try {
-        let data = await userApiService.getAllNotDoctors()
+        let data = await userApiService.filterRoleNotEqualTo(req.body.roleId)
+        console.log('check data: ', req.body)
         return res.status(200).json({
             EC: data.EC,
             EM: data.EM,
@@ -134,6 +135,6 @@ const getAllUsersFilter = async (req, res) => {
 }
 
 module.exports = {
-    signup, checkLogin, getAllDoctors, getAllUsers, getUserRole, getAllNotDoctors,
+    signup, checkLogin, getAllDoctors, getAllUsers, getUserRole, filterRoleNotEqualTo,
     setUserRole, getAllUsersFilter
 }

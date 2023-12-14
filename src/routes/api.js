@@ -8,8 +8,8 @@ const initApiRoutes = (app) => {
     router.post('/login', apiController.checkLogin)
     router.get('/get-all-doctors', apiController.getAllDoctors)
     router.get('/get-all-users', apiController.getAllUsers)
-    router.get('/get-user-role', apiController.getUserRole)
-    router.get('/get-all-not-doctors', apiController.getAllNotDoctors)
+    router.post('/get-user-role', apiController.getUserRole)
+    router.post('/filter-role-not-equal-to', apiController.filterRoleNotEqualTo)
     router.put('/set-user-role', apiController.setUserRole)
     router.get('/get-all-users-filter', apiController.getAllUsersFilter)
 

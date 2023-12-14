@@ -128,7 +128,7 @@ const getAllDoctors = async () => {
 const getUserRole = async (data) => {
     try {
         let role = await db.Role.findOne({
-            where: { roleId: data.roleId }
+            where: { roleId: data }
         })
         if (role) {
             return {
@@ -174,34 +174,41 @@ const getAllUsers = async () => {
     }
 }
 
-const getAllNotDoctors = async () => {
+const filterRoleNotEqualTo = async (roleId) => {
     try {
-        let doctorList = []
+        let userData = []
+        if (!roleId) {
+            return {
+                EC: -4,
+                EM: `Missing parameter roleID`,
+                DT: userData
+            }
+        }
+        console.log('cehck role: ', roleId)
         let data = await db.User.findAll({
-            where: {
-                [Op.or]: [{ roleId: 'A' }, { roleId: 'P' }, { roleId: null }]
-            },
-            attributes: { exclude: ['password', 'createdAt', 'updatedAt', 'RoleId'] }
+            where: { roleId: { [Op.ne]: roleId } },
+            attributes: { exclude: ['password', 'createdAt', 'updatedAt', 'RoleId'] },
+            include: { model: db.Role, attributes: ['roleId', 'roleName'], as: 'roleData' }
         })
         if (data) {
-            doctorList = data
+            userData = data
             return {
                 EC: 0,
-                EM: 'Susccesfully Get All Users that are not Doctors',
-                DT: doctorList
+                EM: `Susccesfully Get All Users that are not ${roleId}`,
+                DT: userData
             }
         }
         return {
             EC: -1,
-            EM: 'Cannot get doctors',
-            DT: doctorList
+            EM: `Cannot get user that are not ${roleId}`,
+            DT: userData
         }
     } catch (e) {
         console.log(e)
         return {
             EC: -2,
             EM: 'Error in userApiService',
-            DT: doctorList
+            DT: []
         }
     }
 }
@@ -278,6 +285,6 @@ const getAllUsersFilter = async (roleId) => {
 }
 
 module.exports = {
-    signup, checkLogin, getAllDoctors, getAllUsers, getUserRole, getAllNotDoctors,
+    signup, checkLogin, getAllDoctors, getAllUsers, getUserRole, filterRoleNotEqualTo,
     setUserRole, getAllUsersFilter
 }
