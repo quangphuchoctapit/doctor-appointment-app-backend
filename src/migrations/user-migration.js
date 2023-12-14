@@ -18,7 +18,11 @@ module.exports = {
         type: Sequelize.STRING
       },
       roleId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: 'U'
+      },
+      image: {
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,

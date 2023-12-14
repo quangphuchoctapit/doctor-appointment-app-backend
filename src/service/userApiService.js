@@ -125,6 +125,78 @@ const getAllDoctors = async () => {
     }
 }
 
+const getAllClinics = async () => {
+    let clinicList = []
+    let data = await db.Clinic.findAll()
+    if (data) {
+        clinicList = data
+        return {
+            EC: 0,
+            EM: 'Susccesfully Get All clinics',
+            DT: clinicList
+        }
+    }
+    return {
+        EC: -1,
+        EM: 'Cannot get clinics',
+        DT: clinicList
+    }
+}
+
+const getAllSpecialties = async () => {
+    let specialtyList = []
+    let data = await db.Specialty.findAll()
+    if (data) {
+        specialtyList = data
+        return {
+            EC: 0,
+            EM: 'Susccesfully Get All Specialties',
+            DT: specialtyList
+        }
+    }
+    return {
+        EC: -1,
+        EM: 'Cannot get Specialties',
+        DT: specialtyList
+    }
+}
+
+const getAllPositions = async () => {
+    let positionList = []
+    let data = await db.Specialty.findAll()
+    if (data) {
+        positionList = data
+        return {
+            EC: 0,
+            EM: 'Susccesfully Get All Positions',
+            DT: positionList
+        }
+    }
+    return {
+        EC: -1,
+        EM: 'Cannot get Positions',
+        DT: positionList
+    }
+}
+
+const getAllLocations = async () => {
+    let locationList = []
+    let data = await db.Location.findAll()
+    if (data) {
+        locationList = data
+        return {
+            EC: 0,
+            EM: 'Susccesfully Get All Locations',
+            DT: locationList
+        }
+    }
+    return {
+        EC: -1,
+        EM: 'Cannot get Locations',
+        DT: locationList
+    }
+}
+
 const getUserRole = async (data) => {
     try {
         let role = await db.Role.findOne({
@@ -136,6 +208,11 @@ const getUserRole = async (data) => {
                 EM: 'get data',
                 DT: role
             }
+        }
+        return {
+            EC: -1,
+            EM: 'Cannot get role data',
+            DT: {}
         }
     } catch (e) {
         console.log(e)
@@ -184,7 +261,6 @@ const filterRoleNotEqualTo = async (roleId) => {
                 DT: userData
             }
         }
-        console.log('cehck role: ', roleId)
         let data = await db.User.findAll({
             where: { roleId: { [Op.ne]: roleId } },
             attributes: { exclude: ['password', 'createdAt', 'updatedAt', 'RoleId'] },
@@ -252,7 +328,7 @@ const setUserRole = async (userId, selectedRole) => {
     }
 }
 
-const getAllUsersFilter = async (roleId) => {
+const getAllUsersFilterByRole = async (roleId) => {
     try {
         let userList = []
         let data = await db.User.findAll({
@@ -285,6 +361,6 @@ const getAllUsersFilter = async (roleId) => {
 }
 
 module.exports = {
-    signup, checkLogin, getAllDoctors, getAllUsers, getUserRole, filterRoleNotEqualTo,
-    setUserRole, getAllUsersFilter
+    signup, checkLogin, getAllDoctors, getAllClinics, getAllSpecialties, getAllPositions, getAllLocations, getAllUsers, getUserRole, filterRoleNotEqualTo,
+    setUserRole, getAllUsersFilterByRole
 }
