@@ -134,6 +134,64 @@ const updateDoctorInfo = async (dataInput) => {
     }
 }
 
+const getDoctorName = async (doctorId) => {
+    try {
+        let doctorName = await db.User.findOne({
+            where: {
+                id: doctorId
+            }
+        })
+        return doctorName.get({ plain: true }).username
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const getDoctorInfo = async (dataInput) => {
+    try {
+        if (!dataInput.id) {
+            return {
+                EC: -3,
+                EM: 'Missing id',
+                DT: ''
+            }
+        }
+        let doctorName = await getDoctorName(dataInput.id)
+
+        let data = await db.Doctor_Info.findOne({
+            where: {
+                doctorId: dataInput.id
+            },
+            include: [
+                { model: db.Specialty, attributes: ['specialtyId', 'specialtyName'], as: 'specialtyData' },
+                { model: db.Position, attributes: ['positionId', 'positionName'], as: 'positionData' },
+                { model: db.Location, attributes: ['locationId', 'locationName'], as: 'locationData' },
+                { model: db.Clinic, attributes: ['name'], as: 'clinicData' }
+            ]
+        })
+        if (data) {
+            data = data.get({ plain: true })
+            return {
+                EC: 0,
+                EM: 'Successfully get all doctor information',
+                DT: { ...data, doctorName }
+            }
+        }
+        return {
+            EC: -1,
+            EM: 'Cannot get doctor information',
+            DT: data
+        }
+    } catch (e) {
+        console.log(e)
+        return {
+            EC: -1,
+            EM: 'Error in doctorApiService'
+        }
+    }
+}
+
 module.exports = {
-    getAllDoctorPositions, createDoctorInfo, updateDoctorInfo
+    getAllDoctorPositions, createDoctorInfo, updateDoctorInfo,
+    getDoctorInfo
 }

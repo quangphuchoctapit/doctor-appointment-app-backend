@@ -339,11 +339,29 @@ const updateDoctorInfo = async (req, res) => {
     }
 }
 
+const getDoctorInfo = async (req, res) => {
+    try {
+        let data = await doctorApiService.getDoctorInfo(req.body)
+        return res.status(200).json({
+            EC: data.EC,
+            EM: data.EM,
+            DT: data.DT
+        })
+    } catch (e) {
+        console.log(e)
+        return res.status(200).json({
+            EC: 1,
+            EM: 'Error from apiController'
+        })
+    }
+}
+
 module.exports = {
     signup, checkLogin, getAllDoctors, getAllClinics,
     getAllSpecialties, getAllLocations, getAllPositions,
     getAllUsers, getUserRole, filterRoleNotEqualTo,
     setUserRole, getAllUsersFilterByRole, createClinic,
     createPosition, createSpecialty, updateClinic,
-    updateSpecialty, getAllDoctorPositions, createDoctorInfo, updateDoctorInfo
+    updateSpecialty, getAllDoctorPositions, createDoctorInfo, updateDoctorInfo,
+    getDoctorInfo
 }

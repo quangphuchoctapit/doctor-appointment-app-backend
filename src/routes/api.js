@@ -17,6 +17,7 @@ const initApiRoutes = (app) => {
     router.post('/filter-role-not-equal-to', apiController.filterRoleNotEqualTo)
     router.get('/get-all-users-filter', apiController.getAllUsersFilterByRole)
     router.get('/get-all-doctor-positions', apiController.getAllDoctorPositions)
+    router.post('/get-doctor-info', apiController.getDoctorInfo)
 
 
     router.post('/create-clinic', apiController.createClinic)
