@@ -27,7 +27,6 @@ const signup = async (data) => {
         }
     }
     let isExistedEmail = await checkExistedEmail(data.email)
-    console.log('check exist: ', isExistedEmail)
     if (isExistedEmail === true) {
         return {
             EC: -2,
@@ -108,7 +107,18 @@ const getAllDoctors = async () => {
     let doctorList = []
     let data = await db.User.findAll({
         where: { roleId: 'D' },
-        attributes: { exclude: ['password', 'createdAt', 'updatedAt', 'RoleId'] }
+        attributes: { exclude: ['password', 'createdAt', 'updatedAt', 'RoleId'] },
+        include: {
+            model: db.Doctor_Info, as: 'doctorData', attributes: { exclude: ['createdAt', 'updatedAt'] },
+            include: [
+                { model: db.Specialty, attributes: ['specialtyId', 'specialtyName'], as: 'specialtyData' },
+                { model: db.Position, attributes: ['positionId', 'positionName'], as: 'positionData' },
+                { model: db.Location, attributes: ['locationId', 'locationName'], as: 'locationData' },
+                { model: db.Clinic, attributes: ['name'], as: 'clinicData' },
+
+            ]
+
+        }
     })
     if (data) {
         doctorList = data
@@ -163,7 +173,9 @@ const getAllSpecialties = async () => {
 
 const getAllPositions = async () => {
     let positionList = []
-    let data = await db.Specialty.findAll()
+    let data = await db.Specialty.findAll({
+
+    })
     if (data) {
         positionList = data
         return {
@@ -360,7 +372,11 @@ const getAllUsersFilterByRole = async (roleId) => {
     }
 }
 
+
+
 module.exports = {
-    signup, checkLogin, getAllDoctors, getAllClinics, getAllSpecialties, getAllPositions, getAllLocations, getAllUsers, getUserRole, filterRoleNotEqualTo,
+    signup, checkLogin, getAllDoctors, getAllClinics,
+    getAllSpecialties, getAllPositions, getAllLocations,
+    getAllUsers, getUserRole, filterRoleNotEqualTo,
     setUserRole, getAllUsersFilterByRole
 }

@@ -3,7 +3,6 @@ import { Op } from 'sequelize'
 
 const createClinic = async (inputData) => {
     try {
-        console.log('check data in clinic service: ', inputData)
         if (!inputData.name || !inputData.location || !inputData.description) {
             return {
                 EC: -1,
@@ -37,7 +36,6 @@ const createClinic = async (inputData) => {
 
 const updateClinic = async (inputData) => {
     try {
-        console.log('check data in clinic service: ', inputData)
         if (!inputData.name || !inputData.location || !inputData.description || !inputData.id) {
             return {
                 EC: -1,
@@ -57,7 +55,7 @@ const updateClinic = async (inputData) => {
         }
         return {
             EC: 0,
-            EM: 'Successfully created new clinic'
+            EM: 'Successfully updated clinic!'
         }
     } catch (e) {
         console.log(e)

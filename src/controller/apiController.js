@@ -1,5 +1,8 @@
 import userApiService from '../service/userApiService'
 import clinicApiService from '../service/clinicApiService.js'
+import specialtyApiService from '../service/specialtyApiService'
+import doctorApiService from '../service/doctorApiService'
+
 
 const signup = async (req, res) => {
     try {
@@ -221,7 +224,7 @@ const createClinic = async (req, res) => {
 
 const createSpecialty = async (req, res) => {
     try {
-        let data = await clinicApiService.createClinic(req.body)
+        let data = await specialtyApiService.createSpecialty(req.body)
         return res.status(200).json({
             EC: data.EC,
             EM: data.EM,
@@ -270,10 +273,77 @@ const updateClinic = async (req, res) => {
     }
 }
 
+const updateSpecialty = async (req, res) => {
+    try {
+        let data = await specialtyApiService.updateSpecialty(req.body)
+        return res.status(200).json({
+            EC: data.EC,
+            EM: data.EM,
+            DT: data.DT
+        })
+    } catch (e) {
+        console.log(e)
+        return res.status(200).json({
+            EC: 1,
+            EM: 'error from apiController'
+        })
+    }
+}
+
+const getAllDoctorPositions = async (req, res) => {
+    try {
+        let data = await doctorApiService.getAllDoctorPositions()
+        return res.status(200).json({
+            EC: data.EC,
+            EM: data.EM,
+            DT: data.DT
+        })
+    } catch (e) {
+        console.log(e)
+        return res.status(200).json({
+            EC: 1,
+            EM: 'error from apiController'
+        })
+    }
+}
+
+const createDoctorInfo = async (req, res) => {
+    try {
+        let data = await doctorApiService.createDoctorInfo(req.body)
+        return res.status(200).json({
+            EC: data.EC,
+            EM: data.EM
+        })
+    } catch (e) {
+        console.log(e)
+        return res.status(200).json({
+            EC: 1,
+            EM: 'error from apiController'
+        })
+    }
+}
+
+const updateDoctorInfo = async (req, res) => {
+    try {
+        let data = await doctorApiService.updateDoctorInfo()
+        return res.status(200).json({
+            EC: data.EC,
+            EM: data.EM
+        })
+    } catch (e) {
+        console.log(e)
+        return res.status(200).json({
+            EC: 1,
+            EM: 'error from apiController'
+        })
+    }
+}
+
 module.exports = {
     signup, checkLogin, getAllDoctors, getAllClinics,
     getAllSpecialties, getAllLocations, getAllPositions,
     getAllUsers, getUserRole, filterRoleNotEqualTo,
     setUserRole, getAllUsersFilterByRole, createClinic,
     createPosition, createSpecialty, updateClinic,
+    updateSpecialty, getAllDoctorPositions, createDoctorInfo, updateDoctorInfo
 }

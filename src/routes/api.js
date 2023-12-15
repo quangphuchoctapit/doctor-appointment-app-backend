@@ -16,14 +16,21 @@ const initApiRoutes = (app) => {
     router.post('/get-user-role', apiController.getUserRole)
     router.post('/filter-role-not-equal-to', apiController.filterRoleNotEqualTo)
     router.get('/get-all-users-filter', apiController.getAllUsersFilterByRole)
+    router.get('/get-all-doctor-positions', apiController.getAllDoctorPositions)
+
 
     router.post('/create-clinic', apiController.createClinic)
     router.post('/create-position', apiController.createPosition)
     router.post('/create-specialty', apiController.createSpecialty)
+    router.post('/create-doctor-info', apiController.createDoctorInfo)
+
 
 
     router.put('/set-user-role', apiController.setUserRole)
     router.put('/update-clinic', apiController.updateClinic)
+    router.put('/update-specialty', apiController.updateSpecialty)
+    router.put('/update-doctor-info', apiController.updateDoctorInfo)
+
 
 
 

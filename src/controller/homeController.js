@@ -11,7 +11,6 @@ const helloWorld = (req, res) => {
 const getAllUsers = async (req, res) => {
     try {
         let userList = await userService.getAllUsers()
-        console.log('check data; ', userList)
         return res.render('users.ejs', { userList })
     } catch (e) {
         console.log(e)
