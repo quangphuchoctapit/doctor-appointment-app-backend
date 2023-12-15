@@ -137,7 +137,9 @@ const getAllDoctors = async () => {
 
 const getAllClinics = async () => {
     let clinicList = []
-    let data = await db.Clinic.findAll()
+    let data = await db.Clinic.findAll({
+        include: { model: db.Location, attributes: ['locationName'], as: 'clinicLocationData' }
+    })
     if (data) {
         clinicList = data
         return {
