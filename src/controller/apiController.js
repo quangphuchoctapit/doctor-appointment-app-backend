@@ -2,7 +2,7 @@ import userApiService from '../service/userApiService'
 import clinicApiService from '../service/clinicApiService.js'
 import specialtyApiService from '../service/specialtyApiService'
 import doctorApiService from '../service/doctorApiService'
-
+require('dotenv').config()
 
 const signup = async (req, res) => {
     try {
@@ -23,10 +23,16 @@ const signup = async (req, res) => {
 const checkLogin = async (req, res) => {
     try {
         let data = await userApiService.checkLogin(req.body)
+        if (data && data.DT && data.DT.access_token) {
+            console.log('lot vao')
+            res.cookie('jwt', data.DT.access_token, { httpOnly: true, maxAge: process.env.JWT_EXPIRESIN })
+        }
         return res.status(200).json({
+            EM: data.EM,
             EC: data.EC,
-            EM: data.EM
+            DT: data.DT
         })
+
     } catch (e) {
         console.log(e)
         return res.status(200).json({

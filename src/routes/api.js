@@ -1,9 +1,12 @@
 import express from 'express'
 import apiController from '../controller/apiController'
+import { checkUserJWT } from '../middleware/JWTActions'
 
 const router = express.Router()
 
 const initApiRoutes = (app) => {
+    router.all('*', checkUserJWT)
+
     router.post('/signup', apiController.signup)
     router.post('/login', apiController.checkLogin)
 

@@ -1,6 +1,9 @@
 import db from '../models'
 import bcrypt from 'bcryptjs'
 import { Op } from 'sequelize'
+import { getRoleWithActions } from './JWTService'
+import { createJWT } from '../middleware/JWTActions'
+require('dotenv').config()
 
 const salt = bcrypt.genSaltSync(10)
 
@@ -87,9 +90,23 @@ const checkLogin = async (data) => {
     }
     let checkPassword = checkHashPassword(data.password, user.password)
     if (checkPassword) {
+        // console.log('check user: ', user)
+        let roleWithActions = await getRoleWithActions(user)
+        let payload = {
+            email: user.email,
+            roleWithActions: roleWithActions,
+            expiresIn: process.env.JWT_EXPIRESIN
+        }
+        let token = await createJWT(payload)
         return {
             EC: 0,
-            EM: 'Successfully Logged In.'
+            EM: 'Successfully Logged In.',
+            DT: {
+                access_token: token,
+                roleWithActions: roleWithActions,
+                email: user.email,
+                username: user.username
+            }
         }
     }
     if (!checkPassword) {
@@ -115,9 +132,7 @@ const getAllDoctors = async () => {
                 { model: db.Position, attributes: ['positionId', 'positionName'], as: 'positionData' },
                 { model: db.Location, attributes: ['locationId', 'locationName'], as: 'locationData' },
                 { model: db.Clinic, attributes: ['name'], as: 'clinicData' },
-
             ]
-
         }
     })
     if (data) {
