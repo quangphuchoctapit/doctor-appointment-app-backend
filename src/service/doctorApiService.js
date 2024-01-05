@@ -134,14 +134,14 @@ const updateDoctorInfo = async (dataInput) => {
     }
 }
 
-const getDoctorName = async (doctorId) => {
+const expandedGetDoctorInfo = async (doctorId) => {
     try {
-        let doctorName = await db.User.findOne({
+        let expandedDoctorData = await db.User.findOne({
             where: {
                 id: doctorId
             }
         })
-        return doctorName.get({ plain: true }).username
+        return expandedDoctorData.get({ plain: true })
     } catch (e) {
         console.log(e)
     }
@@ -156,25 +156,28 @@ const getDoctorInfo = async (dataInput) => {
                 DT: ''
             }
         }
-        let doctorName = await getDoctorName(dataInput.id)
-
+        let expandedDoctorData = await expandedGetDoctorInfo(dataInput.id)
+        let { username, image } = expandedDoctorData
+        // console.log('datainput.id', dataInput.id)
         let data = await db.Doctor_Info.findOne({
             where: {
                 doctorId: dataInput.id
             },
             include: [
+                // { model: db.User, as: 'doctorData', where: { id: dataInput.id } },
                 { model: db.Specialty, attributes: ['specialtyId', 'specialtyName'], as: 'specialtyData' },
                 { model: db.Position, attributes: ['positionId', 'positionName'], as: 'positionData' },
                 { model: db.Location, attributes: ['locationId', 'locationName'], as: 'locationData' },
-                { model: db.Clinic, attributes: ['name'], as: 'clinicData' }
+                { model: db.Clinic, attributes: ['name'], as: 'clinicData' },
             ]
         })
         if (data) {
             data = data.get({ plain: true })
+
             return {
                 EC: 0,
                 EM: 'Successfully get all doctor information',
-                DT: { ...data, doctorName }
+                DT: { ...data, username, image }
             }
         }
         return {

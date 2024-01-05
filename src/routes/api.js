@@ -35,7 +35,7 @@ const initApiRoutes = (app) => {
     router.put('/update-specialty', apiController.updateSpecialty)
     router.put('/update-doctor-info', apiController.updateDoctorInfo)
 
-
+    router.put('/user/edit-img', apiController.editUserImage)
 
 
     return app.use('/api/v1', router)

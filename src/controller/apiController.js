@@ -24,8 +24,8 @@ const checkLogin = async (req, res) => {
     try {
         let data = await userApiService.checkLogin(req.body)
         if (data && data.DT && data.DT.access_token) {
-            console.log('lot vao')
-            res.cookie('jwt', data.DT.access_token, { httpOnly: true, maxAge: process.env.JWT_EXPIRESIN })
+            console.log('lot vao nek r do')
+            res.cookie('jwt', data.DT.access_token, { httpOnly: true })
         }
         return res.status(200).json({
             EM: data.EM,
@@ -362,6 +362,22 @@ const getDoctorInfo = async (req, res) => {
     }
 }
 
+const editUserImage = async (req, res) => {
+    try {
+        let data = await userApiService.editUserImage(req.body)
+        return res.status(200).json({
+            EC: data.EC,
+            EM: data.EM
+        })
+    } catch (e) {
+        console.log(e)
+        return res.status(200).json({
+            EC: 1,
+            EM: 'Error from apiController'
+        })
+    }
+}
+
 module.exports = {
     signup, checkLogin, getAllDoctors, getAllClinics,
     getAllSpecialties, getAllLocations, getAllPositions,
@@ -369,5 +385,5 @@ module.exports = {
     setUserRole, getAllUsersFilterByRole, createClinic,
     createPosition, createSpecialty, updateClinic,
     updateSpecialty, getAllDoctorPositions, createDoctorInfo, updateDoctorInfo,
-    getDoctorInfo
+    getDoctorInfo, editUserImage
 }

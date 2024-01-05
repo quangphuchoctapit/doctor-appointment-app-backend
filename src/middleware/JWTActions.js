@@ -32,7 +32,6 @@ const checkUserJWT = async (req, res, next) => {
     if (cookies && cookies.jwt) {
         let token = cookies.jwt
         let decoded = await verifyToken(token)
-        console.log('chcek decoded: ', decoded)
         if (decoded) {
             req.user = decoded
             next()

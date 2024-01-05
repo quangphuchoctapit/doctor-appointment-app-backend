@@ -16,8 +16,6 @@ module.exports = (sequelize, DataTypes) => {
             Doctor_Info.belongsTo(models.Position, { foreignKey: 'positionId', targetKey: 'positionId', as: 'positionData' })
             Doctor_Info.belongsTo(models.Location, { foreignKey: 'locationId', targetKey: 'locationId', as: 'locationData' })
             Doctor_Info.belongsTo(models.Clinic, { foreignKey: 'clinicId', targetKey: 'id', as: 'clinicData' })
-
-
         }
     };
     Doctor_Info.init({

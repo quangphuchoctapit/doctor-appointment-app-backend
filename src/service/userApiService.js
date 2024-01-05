@@ -90,7 +90,6 @@ const checkLogin = async (data) => {
     }
     let checkPassword = checkHashPassword(data.password, user.password)
     if (checkPassword) {
-        // console.log('check user: ', user)
         let roleWithActions = await getRoleWithActions(user)
         let payload = {
             email: user.email,
@@ -105,6 +104,7 @@ const checkLogin = async (data) => {
                 access_token: token,
                 roleWithActions: roleWithActions,
                 email: user.email,
+                image: user.image,
                 username: user.username
             }
         }
@@ -389,11 +389,47 @@ const getAllUsersFilterByRole = async (roleId) => {
     }
 }
 
+const editUserImage = async (userData) => {
+    if (!userData.email || !userData.image) {
+        return {
+            EC: -4,
+            EM: 'missing email or image'
+        }
+    }
+    try {
+        let data = await db.User.findOne({
+            where: {
+                email: userData.email
+            },
+            attributes: { exclude: ['password', 'createdAt', 'updatedAt', 'RoleId'] }
+        })
+        if (data) {
+            const updateImage = await db.User.update({
+                image: userData.image
+            }, { where: { email: userData.email } })
+            return {
+                EC: 0,
+                EM: 'ok succesfully edit user img'
+            }
+        }
+        return {
+            EC: -1,
+            EM: 'unable to update user img'
+        }
+    } catch (e) {
+        console.log(e)
+        return {
+            EC: -2,
+            EM: 'Error in userApiService',
+            DT: {}
+        }
+    }
+}
 
 
 module.exports = {
     signup, checkLogin, getAllDoctors, getAllClinics,
     getAllSpecialties, getAllPositions, getAllLocations,
     getAllUsers, getUserRole, filterRoleNotEqualTo,
-    setUserRole, getAllUsersFilterByRole
+    setUserRole, getAllUsersFilterByRole, editUserImage
 }
