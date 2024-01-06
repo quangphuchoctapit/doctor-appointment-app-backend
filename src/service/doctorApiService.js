@@ -31,14 +31,14 @@ const createDoctorInfo = async (dataInput) => {
     try {
         if (!dataInput.doctorId || !dataInput.clinicId ||
             !dataInput.locationId || !dataInput.specialtyId
-            || !dataInput.positionId || !dataInput.description) {
+            || !dataInput.positionId || !dataInput.description || !dataInput.availableTime) {
             return {
                 EC: -1,
                 EM: 'Missing parameter'
             }
         }
         let doctorData = []
-        let { doctorId, clinicId, locationId, specialtyId, positionId, description } = dataInput
+        let { doctorId, clinicId, locationId, specialtyId, positionId, description, availableTime } = dataInput
         let isExistedData = await db.Doctor_Info.findAll({
             where: {
                 doctorId: doctorId
@@ -47,7 +47,7 @@ const createDoctorInfo = async (dataInput) => {
         console.log('cehck isexisted data : ', isExistedData)
         if (isExistedData.length > 0) {
             let data = await db.Doctor_Info.update({
-                clinicId, locationId, positionId, specialtyId, description
+                clinicId, locationId, positionId, specialtyId, description, availableTime
             }, {
                 where: {
                     doctorId: doctorId
@@ -68,7 +68,7 @@ const createDoctorInfo = async (dataInput) => {
             }
         } else {
             let data = await db.Doctor_Info.create({
-                doctorId, clinicId, locationId, positionId, specialtyId, description
+                doctorId, clinicId, locationId, positionId, specialtyId, description, availableTime
             })
             if (data) {
                 doctorData = data
@@ -98,7 +98,7 @@ const createDoctorInfo = async (dataInput) => {
 
 const updateDoctorInfo = async (dataInput) => {
     try {
-        let { doctorId, clinicId, locationId, specialtyId, positionId, description } = dataInput
+        let { doctorId, clinicId, locationId, specialtyId, positionId, description, availableTime } = dataInput
         let data = await db.Doctor_Info.findOne({
             where: {
                 doctorId: doctorId
@@ -107,7 +107,7 @@ const updateDoctorInfo = async (dataInput) => {
 
         if (data) {
             let updatedData = await db.Doctor_Info.update({
-                clinicId, locationId, specialtyId, positionId, description
+                clinicId, locationId, specialtyId, positionId, description, availableTime
             })
             if (updatedData) {
 
@@ -164,7 +164,6 @@ const getDoctorInfo = async (dataInput) => {
                 doctorId: dataInput.id
             },
             include: [
-                // { model: db.User, as: 'doctorData', where: { id: dataInput.id } },
                 { model: db.Specialty, attributes: ['specialtyId', 'specialtyName'], as: 'specialtyData' },
                 { model: db.Position, attributes: ['positionId', 'positionName'], as: 'positionData' },
                 { model: db.Location, attributes: ['locationId', 'locationName'], as: 'locationData' },
@@ -181,7 +180,7 @@ const getDoctorInfo = async (dataInput) => {
             }
         }
         return {
-            EC: -1,
+            EC: -2,
             EM: 'Cannot get doctor information',
             DT: data
         }
@@ -194,7 +193,33 @@ const getDoctorInfo = async (dataInput) => {
     }
 }
 
+const getAllSchedule = async () => {
+    try {
+        let schedule = await db.Schedule.findAll({
+            attributes: { exclude: ['createdAt', 'updatedAt'] }
+        })
+        if (schedule) {
+            return {
+                EC: 0,
+                EM: 'ok get all schedules',
+                DT: schedule
+            }
+        }
+        return {
+            EC: -2,
+            EM: 'cannot get schedule',
+            DT: []
+        }
+    } catch (e) {
+        console.log(e)
+        return {
+            EC: -1,
+            EM: 'Error in doctorApiService'
+        }
+    }
+}
+
 module.exports = {
     getAllDoctorPositions, createDoctorInfo, updateDoctorInfo,
-    getDoctorInfo
+    getDoctorInfo, getAllSchedule
 }

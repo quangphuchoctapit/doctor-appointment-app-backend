@@ -127,6 +127,24 @@ const getAllLocations = async (req, res) => {
     }
 }
 
+
+const getAllSchedule = async (req, res) => {
+    try {
+        let data = await doctorApiService.getAllSchedule()
+        return res.status(200).json({
+            EC: data.EC,
+            EM: data.EM,
+            DT: data.DT
+        })
+    } catch (e) {
+        console.log(e)
+        return res.status(200).json({
+            EC: 1,
+            EM: 'error from apiController'
+        })
+    }
+}
+
 const getAllUsers = async (req, res) => {
     try {
         let data = await userApiService.getAllUsers()
@@ -380,7 +398,7 @@ const editUserImage = async (req, res) => {
 
 module.exports = {
     signup, checkLogin, getAllDoctors, getAllClinics,
-    getAllSpecialties, getAllLocations, getAllPositions,
+    getAllSpecialties, getAllLocations, getAllSchedule, getAllPositions,
     getAllUsers, getUserRole, filterRoleNotEqualTo,
     setUserRole, getAllUsersFilterByRole, createClinic,
     createPosition, createSpecialty, updateClinic,

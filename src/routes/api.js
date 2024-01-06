@@ -5,7 +5,7 @@ import { checkUserJWT } from '../middleware/JWTActions'
 const router = express.Router()
 
 const initApiRoutes = (app) => {
-    router.all('*', checkUserJWT)
+    // router.all('*', checkUserJWT)
 
     router.post('/signup', apiController.signup)
     router.post('/login', apiController.checkLogin)
@@ -15,6 +15,8 @@ const initApiRoutes = (app) => {
     router.get('/get-all-specialties', apiController.getAllSpecialties)
     router.get('/get-all-positions', apiController.getAllPositions)
     router.get('/get-all-locations', apiController.getAllLocations)
+    router.get('/get-all-schedule', apiController.getAllSchedule)
+
     router.get('/get-all-users', apiController.getAllUsers)
     router.post('/get-user-role', apiController.getUserRole)
     router.post('/filter-role-not-equal-to', apiController.filterRoleNotEqualTo)

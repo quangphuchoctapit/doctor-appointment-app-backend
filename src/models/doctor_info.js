@@ -16,6 +16,8 @@ module.exports = (sequelize, DataTypes) => {
             Doctor_Info.belongsTo(models.Position, { foreignKey: 'positionId', targetKey: 'positionId', as: 'positionData' })
             Doctor_Info.belongsTo(models.Location, { foreignKey: 'locationId', targetKey: 'locationId', as: 'locationData' })
             Doctor_Info.belongsTo(models.Clinic, { foreignKey: 'clinicId', targetKey: 'id', as: 'clinicData' })
+            Doctor_Info.belongsTo(models.Schedule, { foreignKey: 'availableTime', targetKey: 'id', as: 'scheduleData' })
+
         }
     };
     Doctor_Info.init({
@@ -25,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
         locationId: DataTypes.STRING,
         specialtyId: DataTypes.STRING,
         doctorId: DataTypes.INTEGER,
-        description: DataTypes.STRING
+        description: DataTypes.STRING,
+        availableTime: DataTypes.JSON,
     }, {
         sequelize,
         modelName: 'Doctor_Info',
